@@ -1,0 +1,32 @@
+#YAML for BrilliantSmart BS 20696 (edison screw) and BS 20697 (bayonet cap)
+substitutions:
+  devname: 'Brilliant'
+
+esphome:
+  platform: 'ESP8266'
+  board: 'esp01_1m'
+  name: BrilliantSmart 2069x ${devname}
+  
+output:
+  - platform: esp8266_pwm
+    id: ${devname}_output_cw
+    pin: GPIO14
+    frequency: 200 Hz #Adding this will stop flicker at low dimmer levels
+
+  - platform: esp8266_pwm
+    id: ${devname}_output_ww
+    pin: GPIO12
+    frequency: 200 Hz #Adding this will stop flicker at low dimmer levels
+
+light:
+  - platform: cwww
+    name: ${devname} Light
+    id: ${devname}_light
+    cold_white: ${devname}_output_cw
+    warm_white: ${devname}_output_ww
+    cold_white_color_temperature: 6500 K
+    warm_white_color_temperature: 2700 K
+    gamma_correct: 1.2
+    constant_brightness: true
+    restore_mode: ALWAYS_OFF
+    default_transition_length: 1.5s
