@@ -1,0 +1,57 @@
+#YAML for Arlec GLD120HA (bayonet cap) and GLD122HA (edison screw) Series 2 RGB bulbs using WB3L chip.
+
+#IMPORTANT!!
+#This YAML only applies to Series 2 RGB bulbs (Series 2 is clearly printed on the bulb itself)
+#Series 1 (bulbs without a series number printed) use the old ESP828x chip.
+#This YAML expects ESPHome with libretuya ( https://github.com/kuba2k2/libretuya-esphome )
+#Further information on the WB3L chipcan be found at https://docs.libretuya.ml/boards/wb3l/
+#A cloudcutter profile for this bulb can be found at https://github.com/tuya-cloudcutter/tuya-cloudcutter.github.io/blob/master/devices/arlec-gld12xha.json
+
+substitutions:
+  devname: 'Arlec'
+
+esphome:
+  name: Arlec GLD12xHA ${devname}
+
+libretuya:
+  board: wb3l
+  framework:
+    version: dev
+
+output:
+  - platform: ledc
+    id: ${devname}_output_cw
+    pin: P7
+
+  - platform: ledc
+    id: ${devname}_output_ww
+    pin: P6
+
+  - platform: ledc
+    id: ${devname}_output_red
+    pin: P8
+
+  - platform: ledc
+    id: ${devname}_output_blue
+    pin: P26
+
+  - platform: ledc
+    id: ${devname}_output_green
+    pin: P24
+
+light:
+  - platform: rgbww
+    name: ${devname} Light
+    id: ${devname}_light
+    red: ${devname}_output_red
+    green: ${devname}_output_green
+    blue: ${devname}_output_blue
+    cold_white: ${devname}_output_cw
+    warm_white: ${devname}_output_ww
+    cold_white_color_temperature: 5700 K
+    warm_white_color_temperature: 3000 K
+    gamma_correct: 1.8
+    constant_brightness: true
+    restore_mode: ALWAYS_OFF
+    default_transition_length: 1.5s
+    color_interlock: true
